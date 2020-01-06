@@ -15,3 +15,4 @@ results.fig and results.jpg are the examples of fitted CEST maps for each pool m
 
 To compile and run the program (also for further clarification) see /src/COMPILATIONS_INSTRUCTIONS.txt
  
+![results](https://user-images.githubusercontent.com/46479976/71840616-f2485400-30bd-11ea-990e-0bf791f3c239.jpg)
