@@ -74,7 +74,9 @@
 #include "matrix.h"
 #include "compiler.h"
 
-enum Pools {CONSTANT, MT, NOE1, NOE2, CR, AMIDE, WATER};
+enum Pools {
+	CONSTANT, MT, NOE1, NOE2, CR, AMIDE, WATER
+};
 
 typedef struct {
 	double *offsetsIn;
@@ -105,56 +107,53 @@ void interrupt(int sig) {
 	exit(1);
 }
 
-void findFullModelFitParameters(double *p, double *x, int m, int n, void *data) {
+void findFullModelFitParameters(double *p, double *spectrum, int NFITPARAMETERS, int NfrequencyOffsetIn,
+		void *data) {
 	ExtraData *dptr;
 	dptr = (ExtraData*) data;
 
-	double w;
-	for (int i = 0; i < dptr->NoffsetsIn; ++i) {
-		w = dptr->offsetsIn[i];
+	double singleOffset;
+	for (int i = 0; i < NfrequencyOffsetIn; ++i) {
+		singleOffset = dptr->offsetsIn[i];
 
-		x[i] = p[0] * dptr->poolSwitch[0]
-				+ p[1] * (1 / (1 + pow((w - p[3]) / (p[2]), 2)))
+		spectrum[i] = p[0] * dptr->poolSwitch[0]
+				+ p[1] * (1 / (1 + pow((singleOffset - p[3]) / (p[2]), 2)))
 						* dptr->poolSwitch[1]
-				+ p[4] * (1 / (1 + pow((w - p[6]) / (p[5]), 2)))
+				+ p[4] * (1 / (1 + pow((singleOffset - p[6]) / (p[5]), 2)))
 						* dptr->poolSwitch[2]
-				+ p[7] * (1 / (1 + pow((w - p[9]) / (p[8]), 2)))
+				+ p[7] * (1 / (1 + pow((singleOffset - p[9]) / (p[8]), 2)))
 						* dptr->poolSwitch[3]
-				+ p[10] * (1 / (1 + pow((w - p[12]) / (p[11]), 2)))
+				+ p[10] * (1 / (1 + pow((singleOffset - p[12]) / (p[11]), 2)))
 						* dptr->poolSwitch[4]
-				+ p[13] * (1 / (1 + pow((w - p[15]) / (p[14]), 2)))
+				+ p[13] * (1 / (1 + pow((singleOffset - p[15]) / (p[14]), 2)))
 						* dptr->poolSwitch[5]
-				+ p[16] * (1 / (1 + pow((w - p[18]) / (p[17]), 2)))
+				+ p[16] * (1 / (1 + pow((singleOffset - p[18]) / (p[17]), 2)))
 						* dptr->poolSwitch[6];
 	}
 	return;
 }
 
-void calculateArbitraryPoolFit(double *p, double *result, void *data) {
+void calculateArbitraryPoolFit(double *p, double *spectrum, void *data) {
 	ExtraData *dptr;
 	dptr = (ExtraData*) data;
 
-	double test[dptr->NoffsetsOut];
-	double x[dptr->NoffsetsOut];
-	double w;
+	double singleOffset;
 	for (int i = 0; i < dptr->NoffsetsOut; ++i) {
-		w = dptr->offsetsOut[i];
+		singleOffset = dptr->offsetsOut[i];
 
-		x[i] = p[0] * dptr->poolSwitch[0] * dptr->singlePoolOn[0]
-				+ p[1] * (1 / (1 + pow((w - p[3]) / (p[2]), 2)))
+		spectrum[i] = p[0] * dptr->poolSwitch[0] * dptr->singlePoolOn[0]
+				+ p[1] * (1 / (1 + pow((singleOffset - p[3]) / (p[2]), 2)))
 						* dptr->poolSwitch[1] * dptr->singlePoolOn[1]
-				+ p[4] * (1 / (1 + pow((w - p[6]) / (p[5]), 2)))
+				+ p[4] * (1 / (1 + pow((singleOffset - p[6]) / (p[5]), 2)))
 						* dptr->poolSwitch[2] * dptr->singlePoolOn[2]
-				+ p[7] * (1 / (1 + pow((w - p[9]) / (p[8]), 2)))
+				+ p[7] * (1 / (1 + pow((singleOffset - p[9]) / (p[8]), 2)))
 						* dptr->poolSwitch[3] * dptr->singlePoolOn[3]
-				+ p[10] * (1 / (1 + pow((w - p[12]) / (p[11]), 2)))
+				+ p[10] * (1 / (1 + pow((singleOffset - p[12]) / (p[11]), 2)))
 						* dptr->poolSwitch[4] * dptr->singlePoolOn[4]
-				+ p[13] * (1 / (1 + pow((w - p[15]) / (p[14]), 2)))
+				+ p[13] * (1 / (1 + pow((singleOffset - p[15]) / (p[14]), 2)))
 						* dptr->poolSwitch[5] * dptr->singlePoolOn[5]
-				+ p[16] * (1 / (1 + pow((w - p[18]) / (p[17]), 2)))
+				+ p[16] * (1 / (1 + pow((singleOffset - p[18]) / (p[17]), 2)))
 						* dptr->poolSwitch[6] * dptr->singlePoolOn[6];
-
-		result[i] = x[i];
 	}
 	return;
 }
@@ -455,24 +454,22 @@ int main(int argc, char *argv[]) {
 	opts[3] = 1E-08;
 	opts[4] = 1E-06;
 
-	int m = NFITPARAMETERS;
-	int n = NfrequencyOffsetIn;
-
 	for (size_t l = 0; l < dim1; l++) {
 		double progress = (l * 100.0) / dim1;
 		fprintf(stderr, "**%.2f%%**", progress);
 		for (size_t k = 0; k < dim2; k++) {
 			for (size_t j = 0; j < dim3; j++) {
 				double sum = 0;
-				double x[NfrequencyOffsetIn];
+				double spectrum[NfrequencyOffsetIn];
 				for (size_t i = 0; i < dim4; i++) {
 
-					x[i] = 1.0 - dataInArray[l][k][j][i];
-					sum = sum + x[i];
+					spectrum[i] = 1.0 - dataInArray[l][k][j][i];
+					sum = sum + spectrum[i];
 
 				}
-
+			
 				if (sum > NfrequencyOffsetIn * THRESHOLDBACKGROUND) {
+					// Don't waste time fitting "bad" data
 					continue;
 				}
 
@@ -556,10 +553,11 @@ int main(int argc, char *argv[]) {
 				ub[16] = 1.0; // Water amp
 				ub[17] = 3.0; // Water fwhm
 				ub[18] = 1.0; // Water cs
-				
+
 				// Fitting algorithm NOT thread safe
-				int ret = dlevmar_bc_dif(findFullModelFitParameters, p, x, m, n,
-						lb, ub, NULL, Niterations, opts, info, NULL, NULL,
+				int ret = dlevmar_bc_dif(findFullModelFitParameters, p,
+						spectrum, NFITPARAMETERS, NfrequencyOffsetIn, lb, ub,
+						NULL, Niterations, opts, info, NULL, NULL,
 						(void*) &extraData); // no Jacobian
 
 				double singlePoolFittedSpectrum[NPOOLS][NfrequencyOffsetOut];
@@ -732,4 +730,3 @@ int main(int argc, char *argv[]) {
 
 	return 0;
 }
-
