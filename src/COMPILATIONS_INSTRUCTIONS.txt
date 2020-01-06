@@ -1,0 +1,93 @@
+1. Create levmar object files (in levmar folder)
+
+icc -fPIC -c *.c
+
+2. Create levmar static library (in levmar folder)
+
+ar -rcs liblevmar.a lm.o Axb.o misc.o lmlec.o lmbc.o lmblec.o lmbleic.o 
+
+3. Compile the program dataFitting
+
+icc -Wall -Wextra -I/your/path/to/MATLAB/R2018a/extern/include -I/your/path/to/levmar-2.6 -L/your/path/to/MATLAB/R2018a/bin/glnxa64 -L/your/path/to/MATLAB/R2018a/extern -L/your/path/to/levmar-2.6 dataFitting.c -o dataFitting  -llevmar -lpthread -lm -ldl -mkl=sequential  -lmat -lmx -lmwfl -lmwfoundation_usm -lmwi18n -lut -lmwcpp11compat -l:libhdf5.so.8 -l:libmwboost_log.so.1.56.0 -l:libmwboost_thread.so.1.56.0 -l:libicuuc.so.59 -l:libmwboost_system.so.1.56.0 -l:libmwboost_date_time.so.1.56.0 -l:libmwboost_filesystem.so.1.56.0 -l:libmwboost_serialization.so.1.56.0 -lmwresource_core -l:libicui18n.so.59 -l:libicuio.so.59 -l:libmwboost_chrono.so.1.56.0 -l:libicudata.so.59 -l:libmwboost_regex.so.1.56.0 
+
+4. Set up the environment variables (LD_LIBRARY_PATH) for shared libraries before running the program
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/path/to/MATLAB/R2018a/bin/glnxa64 
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/path/to/MATLAB/R2018a/extern/lib
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/path/to/intel/compilers_and_libraries_2019.4.227/linux/mkl/lib/intel64
+
+export MKLROOT="/your/path/to/intel/compilers_and_libraries_2019.4.227/linux/mkl"
+
+
+
+/*
+ * Program to generate CEST maps by fitting a 7-pool Lorentzian-lineshape model
+ *  	to densely-sampled brain CEST-MRI data.
+ *
+ * 7-pool Lorentzian-lineshape model:
+ * (1) constant pool (offset). Accounts for difference in relaxation
+ * 		properties between different tissues.
+ * (2) MT pool. Magnetization transfer at -2.4 ppm.
+ * (3) NOE1 pool. Nuclear Overhauser Enhancement at -3.5 ppm.
+ * (4) NOE2 pool. Nuclear Overhauser Enhancement at -1.6 ppm.
+ * (5) Cr pool. Cretine + other (amine) CEST effects at 2 ppm.
+ * (6) Amide pool. (Poly)-peptides at 3.5 ppm.
+ * (7) Water pool. Direct water saturation centered at 0 ppm.
+ *
+ * INPUT:
+ *  The following options need to be specified for data fitting:
+ * -i inputFileName.mat (MATLAB .mat file).
+ * -d inputCestData (varible in inputFileName.mat).
+ * 	inputCestData should have been normalized and B0-corrected.
+ * -k originalFreqOffsets (varible in inputFileName.mat)
+ * -o outputFileName.mat (MATLAB .mat file)
+ * -l newFreqOffsets (varible in inputFileName.mat)
+ * -s poolSwitchOnOff (varible in inputFileName.mat). A vector of 0 (exclude) and 1 (include)
+ * 	for each of 7 pools in the model.
+ * -r repetitions for data fitting
+ * any (optional) comments (will be saved in file "outputFileName_logfile.txt")
+ *
+ * Example:
+ * ./dataFitting -i inputFileName.mat -d inputCestData -k originalFreqOffsets
+ *  	-o outputFileName.mat -l newFreqOffsets -s poolSwitchOnOff -r 100 my optional comments
+ *
+ * OUTPUT:
+ * outputFileName.mat
+ * Use c2matlab_data_conversion.m to convert data
+ *  	from C style (row major order) to MATLAB style (column major order).
+ * outputFileName_c2m.mat contains:
+ * fitPars - Contains all fitted parameters [dim1 x dim2 x dim3 x 19], where
+ * 1st parameter - constant offset
+ * 2-4 parameters -   MT (amplitude, FWHM, offset)
+ * 5-7 parameters -   NOE1 (amplitude, FWHM, offset)
+ * 8-10 parameters -  NOE2 (amplitude, FWHM, offset)
+ * 11-13 parameters - Cr (amplitude, FWHM, offset)
+ * 14-16 parameters - Amide (amplitude, FWHM, offset)
+ * 17-19 parameters - Water (amplitude, FWHM, offset)
+ *
+ * Individual fitted spectra for each pool are saved in the corresponding arrays:
+ * fitMtPool -    MT
+ * fitNoe1Pool -  NOE1
+ * fitNoe2Pool -  NOE2
+ * fitCrPool -    Cr
+ * fitAmidePool - Amide
+ * fitWaterPool - Water
+ *
+ * Time stamp and (optional) comments will be saved in file "outputFileName_logfile.txt"
+ */
+
+
+
+5. Example of running the program with the provided test CEST data
+
+./dataFitting -i your/path/to/testDataIn.mat -d dataIn -k offsetIn -o your/path/to/testDataOut.mat -l offsetOut -s poolSwitch -r 100 my optional comments
+
+6. Run c2matlab_data_conversion.m before visualizing the results
+
+c2matlab_data_conversion('testDataOut.mat')
+
+7. testDataOut_c2m.mat is the final output file
+
+
