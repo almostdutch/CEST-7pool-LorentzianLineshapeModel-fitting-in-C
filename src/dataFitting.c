@@ -107,8 +107,8 @@ void interrupt(int sig) {
 	exit(1);
 }
 
-void findFullModelFitParameters(double *p, double *spectrum, int NFITPARAMETERS, int NfrequencyOffsetIn,
-		void *data) {
+void findFullModelFitParameters(double *p, double *spectrum, int NFITPARAMETERS,
+		int NfrequencyOffsetIn, void *data) {
 	ExtraData *dptr;
 	dptr = (ExtraData*) data;
 
@@ -455,19 +455,22 @@ int main(int argc, char *argv[]) {
 	opts[4] = 1E-06;
 
 	for (size_t l = 0; l < dim1; l++) {
+
 		double progress = (l * 100.0) / dim1;
 		fprintf(stderr, "**%.2f%%**", progress);
+
 		for (size_t k = 0; k < dim2; k++) {
+
 			for (size_t j = 0; j < dim3; j++) {
+
 				double sum = 0;
 				double spectrum[NfrequencyOffsetIn];
-				for (size_t i = 0; i < dim4; i++) {
 
+				for (size_t i = 0; i < dim4; i++) {
 					spectrum[i] = 1.0 - dataInArray[l][k][j][i];
 					sum = sum + spectrum[i];
-
 				}
-			
+
 				if (sum > NfrequencyOffsetIn * THRESHOLDBACKGROUND) {
 					// Don't waste time fitting "bad" data
 					continue;
@@ -730,3 +733,4 @@ int main(int argc, char *argv[]) {
 
 	return 0;
 }
+
