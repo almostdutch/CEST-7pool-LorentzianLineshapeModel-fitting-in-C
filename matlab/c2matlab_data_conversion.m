@@ -6,7 +6,7 @@
 % outputFileName.mat
 %
 % Example:
-% c2matlab_data_conversion("outputFileName.mat")
+% c2matlab_data_conversion('outputFileName.mat')
 %
 % Output:
 % outputFileName_c2m.mat
