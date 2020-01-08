@@ -15,7 +15,7 @@
  * INPUT:
  *  The following options need to be specified for data fitting:
  * -i inputFileName.mat (MATLAB .mat file).
- * -d inputCestData (varible in inputFileName.mat).
+ * -d inputCestData (varible in inputFileName.mat). [dim1 x dim2 x Nslices x NoriginalFreqOffsets]
  * 	inputCestData should have been normalized and B0-corrected.
  * -k originalFreqOffsets (varible in inputFileName.mat)
  * -o outputFileName.mat (MATLAB .mat file)
@@ -34,7 +34,7 @@
  * Use c2matlab_data_conversion.m to convert data
  *  	from C style (row major order) to MATLAB style (column major order).
  * outputFileName_c2m.mat contains:
- * fitPars - Contains all fitted parameters [dim1 x dim2 x dim3 x 19], where
+ * fitPars - Contains all fitted parameters [dim1 x dim2 x Nslices x Nparameters = 19], where
  * 1st parameter - constant offset
  * 2-4 parameters -   MT (amplitude, FWHM, offset)
  * 5-7 parameters -   NOE1 (amplitude, FWHM, offset)
@@ -43,7 +43,7 @@
  * 14-16 parameters - Amide (amplitude, FWHM, offset)
  * 17-19 parameters - Water (amplitude, FWHM, offset)
  *
- * Individual fitted spectra for each pool are saved in the corresponding arrays:
+ * Individual fitted spectra for each pool are saved in the corresponding arrays [dim1 x dim2 x Nslices x NnewFreqOffsets]:
  * fitMtPool -    MT
  * fitNoe1Pool -  NOE1
  * fitNoe2Pool -  NOE2
