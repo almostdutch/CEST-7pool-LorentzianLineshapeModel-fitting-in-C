@@ -8,12 +8,12 @@ ar -rcs liblevmar.a lm.o Axb.o misc.o lmlec.o lmbc.o lmblec.o lmbleic.o
 
 3. Compile the program dataFitting
 
-icc -Wall -Wextra -I/your/path/to/MATLAB/R2018a/extern/include -I/your/path/to/levmar-2.6\
-    -L/your/path/to/MATLAB/R2018a/bin/glnxa64 -L/your/path/to/MATLAB/R2018a/extern -L/your/path/to/levmar-2.6\
-    dataFitting.c -o dataFitting  -llevmar -lpthread -lm -ldl -mkl=sequential  -lmat -lmx -lmwfl -lmwfoundation_usm\
-    -lmwi18n -lut -lmwcpp11compat -l:libhdf5.so.8 -l:libmwboost_log.so.1.56.0 -l:libmwboost_thread.so.1.56.0\
-    -l:libicuuc.so.59 -l:libmwboost_system.so.1.56.0 -l:libmwboost_date_time.so.1.56.0 -l:libmwboost_filesystem.so.1.56.0\
-    -l:libmwboost_serialization.so.1.56.0 -lmwresource_core -l:libicui18n.so.59 -l:libicuio.so.59\
+icc -Wall -Wextra -I/your/path/to/MATLAB/R2018a/extern/include -I/your/path/to/levmar-2.6
+    -L/your/path/to/MATLAB/R2018a/bin/glnxa64 -L/your/path/to/MATLAB/R2018a/extern -L/your/path/to/levmar-2.6
+    dataFitting.c -o dataFitting  -llevmar -lpthread -lm -ldl -mkl=sequential  -lmat -lmx -lmwfl -lmwfoundation_usm
+    -lmwi18n -lut -lmwcpp11compat -l:libhdf5.so.8 -l:libmwboost_log.so.1.56.0 -l:libmwboost_thread.so.1.56.0
+    -l:libicuuc.so.59 -l:libmwboost_system.so.1.56.0 -l:libmwboost_date_time.so.1.56.0 -l:libmwboost_filesystem.so.1.56.0
+    -l:libmwboost_serialization.so.1.56.0 -lmwresource_core -l:libicui18n.so.59 -l:libicuio.so.59
     -l:libmwboost_chrono.so.1.56.0 -l:libicudata.so.59 -l:libmwboost_regex.so.1.56.0 
 
 4. Set up the environment variables (LD_LIBRARY_PATH) for shared libraries before running the program
@@ -88,7 +88,7 @@ export MKLROOT="/your/path/to/intel/compilers_and_libraries_2019.4.227/linux/mkl
 
 5. Example of running the program with the provided test CEST data
 
-./dataFitting -i your/path/to/testDataIn.mat -d dataIn -k offsetIn -o your/path/to/testDataOut.mat\
+./dataFitting -i your/path/to/testDataIn.mat -d dataIn -k offsetIn -o your/path/to/testDataOut.mat
     -l offsetOut -s poolSwitch -r 100 my optional comments
 
 6. Run c2matlab_data_conversion.m before visualizing the results
