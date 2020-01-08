@@ -460,7 +460,6 @@ int main(int argc, char *argv[]) {
 		fprintf(stderr, "**%.2f%%**", progress);
 
 		for (size_t k = 0; k < dim2; k++) {
-
 			for (size_t j = 0; j < dim3; j++) {
 
 				double sum = 0;
