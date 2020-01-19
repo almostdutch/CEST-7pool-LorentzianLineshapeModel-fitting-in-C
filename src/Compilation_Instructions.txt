@@ -91,7 +91,8 @@ export MKLROOT="/your/path/to/intel/compilers_and_libraries_2019.4.227/linux/mkl
 
 5. Example of running the program with the provided test CEST data
 
-./dataFitting -i your/path/to/testDataIn.mat -d dataIn -k offsetIn -o your/path/to/testDataOut.mat -l offsetOut -s poolSwitch -r 100 my optional comments
+./dataFitting -i your/path/to/testDataIn.mat -d dataIn -k offsetIn -o your/path/to/testDataOut.mat 
+-l offsetOut -s poolSwitch -r 100 my optional comments
 
 6. Run c2matlab_data_conversion.m before visualizing the results
 
