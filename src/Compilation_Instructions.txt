@@ -26,11 +26,8 @@ dataFitting.c multiLorentzian.c -o dataFitting
 4. Set up the environment variables (LD_LIBRARY_PATH) for shared libraries before running the program
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/path/to/MATLAB/R2018a/bin/glnxa64 
-
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/path/to/MATLAB/R2018a/extern/lib
-
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/your/path/to/intel/compilers_and_libraries_2019.4.227/linux/mkl/lib/intel64
-
 export MKLROOT="/your/path/to/intel/compilers_and_libraries_2019.4.227/linux/mkl"
 
 /*
