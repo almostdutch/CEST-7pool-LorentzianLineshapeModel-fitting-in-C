@@ -1,3 +1,5 @@
+The data fed to the program should be in double precision
+
 1. Create levmar object files (in levmar folder)
 
 icc -fPIC -c *.c
