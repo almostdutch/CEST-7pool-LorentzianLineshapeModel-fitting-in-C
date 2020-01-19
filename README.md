@@ -1,4 +1,4 @@
-# Program to generate CEST maps by fitting a 7-pool Lorentzian-lineshape model to densely-sampled brain CEST-MRI data.
+# Program to generate CEST maps by fitting a 7-pool Lorentzian-lineshape model to densely-sampled brain CEST-MRI data
 
 The program is dependent on the following Libraries:
 
