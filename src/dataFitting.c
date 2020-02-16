@@ -17,22 +17,28 @@
  * -i inputFileName.mat (MATLAB .mat file).
  * -d inputCestData (varible in inputFileName.mat).
  * 	inputCestData should have been normalized and B0-corrected.
- * -k originalFreqOffsets (varible in inputFileName.mat)
+ * -k inputFreqOffsets (varible in inputFileName.mat)
  * -o outputFileName.mat (MATLAB .mat file)
- * -l newFreqOffsets (varible in inputFileName.mat)
+ * -l outputFreqOffsets (varible in inputFileName.mat)
  * -s poolSwitchOnOff (varible in inputFileName.mat). A vector of 0 (exclude) and 1 (include)
  * 	for each of 7 pools in the model.
  * -r repetitions for data fitting
  * any (optional) comments (will be saved in file "outputFileName_logfile.txt")
  *
  * Example:
- * ./dataFitting -i inputFileName.mat -d inputCestData -k originalFreqOffsets
- *  	-o outputFileName.mat -l newFreqOffsets -s poolSwitchOnOff -r 100 my optional comments
- *
+ * ./dataFitting -i inputFileName.mat -d inputCestData -k inputFreqOffsets
+ *  	-o outputFileName.mat -l outputFreqOffsets -s poolSwitchOnOff -r 100 my optional comments
+ *  	
  * OUTPUT:
- * outputFileName.mat
+ * outputFileName.mat - contains fitted parameters in C style (row major order).
+ *
  * Use c2matlab_data_conversion.m to convert data
  *  	from C style (row major order) to MATLAB style (column major order).
+ *
+ * Example:
+ * c2matlab_data_conversion('outputFileName.mat')
+ *
+ * OUTPUT:
  * outputFileName_c2m.mat contains:
  * fitPars - Contains all fitted parameters [dim1 x dim2 x dim3 x 19], where
  * 1st parameter - constant offset
@@ -76,6 +82,10 @@
 #include "multiLorentzian.h"
 
 int main(int argc, char *argv[]) {
+
+	if (argc < 8) {
+		usage();
+	}
 
 	if (catchSignal(SIGINT, interrupt) == -1) {
 		error("Can't map the handler");
@@ -645,6 +655,4 @@ int main(int argc, char *argv[]) {
 
 	return 0;
 }
-
-
 
