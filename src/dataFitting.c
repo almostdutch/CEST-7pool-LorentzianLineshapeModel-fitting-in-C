@@ -32,11 +32,11 @@
  * OUTPUT:
  * outputFileName.mat - contains fitted parameters in C style (row major order).
  *
- * Use c2matlab_data_conversion.m to convert data
+ * Use c2matlabDataConversion.m to convert data
  *  	from C style (row major order) to MATLAB style (column major order).
  *
  * Example:
- * c2matlab_data_conversion('outputFileName.mat')
+ * c2matlabDataConversion('outputFileName.mat')
  *
  * OUTPUT:
  * outputFileName_c2m.mat contains:
