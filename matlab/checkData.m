@@ -1,3 +1,4 @@
+function checkData(InputName)
 %
 % Program to visualize fitted maps
 %
@@ -7,9 +8,6 @@
 % Example:
 % checkData('outputFileName_c2m.mat')
 %
-
-
-function checkData(InputName)
 
 load(InputName, 'fitPars')
 
