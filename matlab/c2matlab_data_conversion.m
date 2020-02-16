@@ -1,3 +1,4 @@
+function c2matlab_data_conversion(InputName)
 %
 % Program to convert output data from dataFitting from C-style (row major
 % order) to MATLAB-style (column major order)
@@ -15,8 +16,6 @@
 %
 % (c) (2019), Vitaliy Khlebnikov, PhD
 %
-
-function c2matlab_data_conversion(InputName)
 
 load(InputName) 
 
