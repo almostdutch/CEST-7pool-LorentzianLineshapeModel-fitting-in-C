@@ -1,6 +1,7 @@
 #ifndef _FIT_H_
 #define _FIT_H_
 
+void usage(void);
 enum Pools {
 	CONSTANT, MT, NOE1, NOE2, CR, AMIDE, WATER
 };
@@ -14,11 +15,11 @@ typedef struct {
 	double *singlePoolOn;
 } ExtraData;
 
-void error(char *);
+void error(char*);
 char* timeStamp(void);
 int catchSignal(int, void (*handler)(int));
 void interrupt(int);
-void findFullModelFitParameters(double *, double *, int, int, void *);
-void calculateArbitraryPoolFit(double *, double *, void *);
+void findFullModelFitParameters(double*, double*, int, int, void*);
+void calculateArbitraryPoolFit(double*, double*, void*);
 
 #endif
