@@ -15,7 +15,6 @@ n=[2 5 8 11 14 17];
 names={'MT pools' 'NOE1 pool', 'NOE2 pool', 'Cr pool', 'Amide pool', 'Water pool'};
 
 figure
-fitPars=imrotate(fitPars,90);
 for ii=1:numel(n)
     subplot(2,3,ii)
     imagesc(fitPars(:,:,1,n(ii))),axis off, axis equal, colormap parula
