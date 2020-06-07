@@ -1,6 +1,6 @@
 # Program to generate CEST maps by fitting a 7-pool Lorentzian-lineshape model to densely-sampled brain CEST-MRI data
 
-# Prerequisites:
+## Prerequisites:
 
 1. Levmar (provided with this program). Levenberg-Marquardt nonlinear least squares algorithm. Available from http://users.ics.forth.gr/~lourakis/levmar/index.html#download
 
